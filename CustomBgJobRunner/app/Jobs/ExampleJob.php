@@ -1,4 +1,4 @@
-// app/Jobs/ExampleJob.php
+<?php
 
 namespace App\Jobs;
 

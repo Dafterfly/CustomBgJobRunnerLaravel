@@ -1,3 +1,5 @@
+<?php
+
 use App\Helpers\BackgroundJobRunner;
 
 function runBackgroundJob($class, $method, $parameters = [], $maxRetries = 3, $retryDelay = 5)

@@ -14,7 +14,9 @@ return [
     */
 
     'name' => env('APP_NAME', 'Laravel'),
+    'namespace' => 'App\\',
 
+    
     /*
     |--------------------------------------------------------------------------
     | Application Environment
