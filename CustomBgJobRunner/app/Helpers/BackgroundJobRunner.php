@@ -10,16 +10,24 @@ class BackgroundJobRunner
     protected $class;
     protected $method;
     protected $parameters;
-    protected $maxRetries = 3;
-    protected $retryDelay = 5; // seconds
+    protected $maxRetries;
+    protected $retryDelay;
 
     public function __construct($class, $method, $parameters = [], $maxRetries = null, $retryDelay = null)
     {
         $this->class = $class;
         $this->method = $method;
         $this->parameters = $parameters;
-        $this->maxRetries = $maxRetries ?? $this->maxRetries;
-        $this->retryDelay = $retryDelay ?? $this->retryDelay;
+
+        // Fetch maxRetries and retryDelay from config if not provided
+        $this->maxRetries = $maxRetries ?? config('background_jobs.retry.max_attempts', 3);
+        $this->retryDelay = $retryDelay ?? config('background_jobs.retry.delay_seconds', 5);
+
+        Log::info("Background job started", [
+            'class' => $this->class,
+            'method' => $this->method,
+            'parameters' => $this->parameters,
+        ]);
     }
 
     public function execute()
