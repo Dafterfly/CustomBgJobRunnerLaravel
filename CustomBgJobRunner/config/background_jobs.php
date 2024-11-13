@@ -1,8 +1,13 @@
 <?php
 
 return [
+    'retry' => [
+        'max_attempts' => 3,
+        'delay_seconds' => 5,
+    ],
     'approved_classes' => [
-        App\Jobs\ExampleJob::class => ['handle'],
-        // Add other authorized classes and their methods here
+        // Example of approved classes and methods:
+        'App\Jobs\ExampleJob' => ['handle'],
+        // Add more classes and their approved methods as needed
     ],
 ];
