@@ -107,6 +107,9 @@ This command will execute the `handle` method of `App\Jobs\ExampleJob` with `par
 
 To manage jobs, a web-based dashboard is included. Access it by navigating to `/background-jobs`. From here, you can view job logs, retry failed jobs, and check status updates.
 
+![image](https://github.com/user-attachments/assets/dd7c1795-a050-43cd-ada3-e8edfc7ddc2a)
+
+
 ## Configuration
 
 ### Retry Settings
