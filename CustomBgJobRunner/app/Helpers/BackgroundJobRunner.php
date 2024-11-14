@@ -15,24 +15,25 @@ class BackgroundJobRunner
     protected $retryDelay;
     protected $jobLog;
 
-    public function __construct($class, $method, $parameters = [], $maxRetries = 3, $retryDelay = 5)
-    {
-        $this->class = $class;
-        $this->method = $method;
-        $this->parameters = $parameters;
-        $this->maxRetries = $maxRetries ?? 3; // Default to 3 if not provided
-        $this->retryDelay = $retryDelay ?? 5; // Default to 5 if not provided
+public function __construct($class, $method, $parameters = [], $maxRetries = 3, $retryDelay = 5)
+{
+    $this->class = $class;
+    $this->method = $method;
+    $this->parameters = is_array($parameters) ? $parameters : [$parameters];
+    $this->maxRetries = $maxRetries ?? 3; // Ensure a default value of 3
+    $this->retryDelay = $retryDelay ?? 5; // Ensure a default value of 5
 
-        // Create a new job log entry
-        $this->jobLog = JobLog::create([
-            'class' => $this->class,
-            'method' => $this->method,
-            'parameters' => json_encode($this->parameters),
-            'status' => 'pending',
-            'max_retries' => $this->maxRetries,
-            'retry_delay' => $this->retryDelay,
-        ]);
-    }
+    // Create a new job log entry
+    $this->jobLog = JobLog::create([
+        'class' => $this->class,
+        'method' => $this->method,
+        'parameters' => json_encode($this->parameters),
+        'status' => 'pending',
+        'max_retries' => $this->maxRetries,
+        'retry_delay' => $this->retryDelay,
+    ]);
+}
+
 
 
     public function execute()
