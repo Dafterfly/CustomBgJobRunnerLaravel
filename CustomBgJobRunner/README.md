@@ -12,6 +12,8 @@ This project provides a custom background job runner for Laravel, enabling you t
 - **Logging**: Logs job status and errors, including retry attempts.
 - **Security**: Allows only pre-approved classes and methods to be run in the background.
 - **Configuration Options**: Easily configure retry attempts, delay between retries, and approved classes.
+- **Job Management Dashboard**: A web-based interface to view job logs and manage jobs (optional feature).
+- **Job Delays and Priority**: Basic support for delaying and prioritizing jobs.
 
 ---
 
@@ -24,44 +26,52 @@ This project provides a custom background job runner for Laravel, enabling you t
    cd <repository-folder>
    ```
 
-2. **Install Laravel dependencies**:
+2. **Install Laravel Dependencies**:
    
    ```bash
    composer install
    ```
 
-3. **Configuration**:
+3. **Environment Configuration**:
    
-   - Copy `.env.example` to `.env` and configure your database and other settings as needed.
-   - Run migrations if necessary for other parts of the Laravel application:
+   - Copy `.env.example` to `.env` and configure your database settings:
      
      ```bash
-     php artisan migrate
+     cp .env.example .env
+     php artisan key:generate
      ```
+   * Open `.env` and set up your database credentials.
 
-4. **Set Up Configuration for Background Job Runner**:
+4. **Run Database Migrations**:
    
-   - Create a configuration file for the background job runner at `config/background_jobs.php`:
-     
-     ```php
-     <?php
-     
-     return [
-         'retry' => [
-             'max_attempts' => 3,
-             'delay_seconds' => 5,
-         ],
-         'approved_classes' => [
-             // Example: allow ExampleJob's handle method
-             'App\Jobs\ExampleJob' => ['handle'],
-             // Add other approved classes and methods here
-         ],
-     ];
-     ```
+   - This project includes a `job_logs` table to store job log information.
+   
+   ```bash
+   php artisan migrate
+   ```
 
-5. **Custom Logging Configuration**:
+5. **Configuration**:
    
-   - Open `config/logging.php` and add a new logging channel for background job errors:
+   - This project uses a configuration file for background job settings. Review the file at `config/background_jobs.php`:
+
+```php
+<?php
+
+return [
+    'retry' => [
+        'max_attempts' => 3,
+        'delay_seconds' => 5,
+    ],
+    'approved_classes' => [
+        // Add classes and methods here to allow them to run as background jobs
+        'App\Jobs\ExampleJob' => ['handle'],
+    ],
+];
+```
+
+6. **Logging Setup**:
+   
+   - Open `config/logging.php` and verify that the `background_jobs` channel is configured to log job-related errors:
      
      ```php
      'channels' => [
@@ -74,21 +84,25 @@ This project provides a custom background job runner for Laravel, enabling you t
      ],
      ```
 
-6. **Adding Helper Functions**:
+7. **Autoload Helper Functions**:
    
-   - Add a `runBackgroundJob` helper function in `app/Support/helpers.php`, if not already present:
+   - Ensure the helper functions in `app/Support/helpers.php` are autoloaded by checking `composer.json`:
      
-     ```php
-     <?php
-     
-     use App\Helpers\BackgroundJobRunner;
-     
-     function runBackgroundJob($class, $method, $parameters = [], $maxRetries = 3, $retryDelay = 5)
-     {
-         $jobRunner = new BackgroundJobRunner($class, $method, $parameters, $maxRetries, $retryDelay);
-         $jobRunner->execute();
+     ```json
+     "autoload": {
+         "files": [
+             "app/Support/helpers.php"
+         ]
      }
      ```
+
+8. **Run:**
+   
+   Run the following command to refresh autoloading:
+   
+   ```bash
+   composer dump-autoload
+   ```
 
 ---
 
@@ -116,6 +130,10 @@ runBackgroundJob(App\Jobs\ExampleJob::class, 'handle', ['param1', 'param2']);
 
 This command will execute the `handle` method of `App\Jobs\ExampleJob` with `param1` and `param2` as arguments.
 
+### Job Management Dashboard
+
+To manage jobs, a web-based dashboard is included. Access it by navigating to `/background-jobs`. From here, you can view job logs, retry failed jobs, and check status updates.
+
 ## Configuration
 
 ### Retry Settings
@@ -127,7 +145,6 @@ You can configure the retry attempts and delay between retries in `config/backgr
     'max_attempts' => 3,
     'delay_seconds' => 5,
 ],
-
 ```
 
 ### Approved Classes and Methods
