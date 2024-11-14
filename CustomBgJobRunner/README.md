@@ -69,34 +69,7 @@ return [
 ];
 ```
 
-6. **Logging Setup**:
-   
-   - Open `config/logging.php` and verify that the `background_jobs` channel is configured to log job-related errors:
-     
-     ```php
-     'channels' => [
-         // Other channels...
-         'background_jobs' => [
-             'driver' => 'single',
-             'path' => storage_path('logs/background_jobs_errors.log'),
-             'level' => 'error',
-         ],
-     ],
-     ```
-
-7. **Autoload Helper Functions**:
-   
-   - Ensure the helper functions in `app/Support/helpers.php` are autoloaded by checking `composer.json`:
-     
-     ```json
-     "autoload": {
-         "files": [
-             "app/Support/helpers.php"
-         ]
-     }
-     ```
-
-8. **Run:**
+6. **Run:**
    
    Run the following command to refresh autoloading:
    
@@ -160,7 +133,25 @@ For security, only pre-approved classes and methods can be executed. Define thes
 ## Logging
 
 - **Job Logs**: Job execution statuses (e.g., "Job successfully executed") are logged in the standard `laravel.log` file.
+
+Sample logging:
+
+```shell
+[2024-11-14 20:29:40] local.INFO: ExampleJob is being processed  
+[2024-11-14 20:29:40] local.INFO: Hello world!  
+[2024-11-14 20:29:40] local.INFO: Retried job: App\Jobs\ExampleJob@handle  
+[2024-11-14 20:29:50] local.INFO: ExampleJob is being processed  
+[2024-11-14 20:29:50] local.INFO: Hello world!  
+[2024-11-14 20:29:50] local.INFO: Retried job: App\Jobs\ExampleJob@handle  
+[2024-11-14 20:29:56] local.INFO: Canceled job: App\Jobs\ExampleJob@handle  
+[2024-11-14 20:33:31] local.INFO: ExampleJob is being processed  
+[2024-11-14 20:33:31] local.INFO: Hello world!  
+[2024-11-14 20:33:31] local.INFO: Retried job: App\Jobs\ExampleJob@handle  
+[2024-11-14 20:33:39] local.INFO: Canceled job: App\Jobs\ExampleJob@handle  
+```
+
 - **Error Logs**: Errors and unauthorized attempts are logged in `storage/logs/background_jobs_errors.log`.
+- 
 
 ## Testing
 
@@ -170,8 +161,9 @@ For security, only pre-approved classes and methods can be executed. Define thes
    - Use `runBackgroundJob` with an approved class and method and confirm it runs successfully.
 2. **Test Unauthorized Job Execution**:
    - Attempt to run a non-approved class and check `background_jobs_errors.log` for unauthorized attempt logging.
+3- **Job Management Dashboard**:
+   - Access the dashboard and verify that job statuses, retry counts, and error logs display correctly.
 
 ## Assumptions and Limitations
 
 - **Job Execution Security**: Only classes/methods listed in `approved_classes` are allowed to execute. Additional security measures may be required in production environments.
-- **Queue Priority and Delays**: Basic priority and delay handling can be added as needed, though this implementation does not include complex scheduling.
