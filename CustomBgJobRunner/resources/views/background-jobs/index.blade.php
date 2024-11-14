@@ -24,7 +24,6 @@
                     <th>Class</th>
                     <th>Method</th>
                     <th>Status</th>
-                    <th>Retries</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -35,7 +34,6 @@
                         <td>{{ $log['class'] }}</td>
                         <td>{{ $log['method'] }}</td>
                         <td>{{ $log['status'] }}</td>
-                        <td>{{ $log['retries'] }}</td>
                         <td>
                             <form action="{{ route('background-jobs.retry', $log['id']) }}" method="POST" style="display:inline;">
                                 @csrf
