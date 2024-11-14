@@ -23,6 +23,7 @@
                     <th>Job ID</th>
                     <th>Class</th>
                     <th>Method</th>
+                    <th>Retries</th>
                     <th>Status</th>
                     <th>Actions</th>
                 </tr>
@@ -33,6 +34,7 @@
                         <td>{{ $log['id'] }}</td>
                         <td>{{ $log['class'] }}</td>
                         <td>{{ $log['method'] }}</td>
+                        <td>{{ $log['attempts'] }}</td>
                         <td>{{ $log['status'] }}</td>
                         <td>
                             <form action="{{ route('background-jobs.retry', $log['id']) }}" method="POST" style="display:inline;">
