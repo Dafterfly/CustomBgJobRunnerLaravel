@@ -12,9 +12,10 @@
         protected $parameters;
         protected $maxRetries = 3;
         protected $retryDelay = 5;
-        protected $delay = 0; // Default delay to 0
+        protected $delay = 0;
+        protected $priority = 1;
         
-        public function __construct($class, $method, $parameters = [], $maxRetries = null, $retryDelay = null, $delay = 0)
+        public function __construct($class, $method, $parameters = [], $maxRetries = null, $retryDelay = null, $delay = 0, $priority = 1)
         {
             $this->class = $class;
             $this->method = $method;
@@ -22,6 +23,7 @@
             $this->maxRetries = $maxRetries ?? $this->maxRetries;
             $this->retryDelay = $retryDelay ?? $this->retryDelay;
             $this->delay = $delay;
+            $this->priority = $priority;
         }
         
         public function execute()
